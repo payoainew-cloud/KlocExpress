@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+
+import React, { useState, useEffect, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { ProductCard } from '../components/ProductCard';
 import { CATEGORIES } from '../constants';
 import { supabase, mapProductFromDB } from '../lib/supabaseClient';
 import { Product } from '../types';
-import { SlidersHorizontal, X, Loader2, ChevronDown, Filter } from 'lucide-react';
+import { SlidersHorizontal, X, Loader2, ChevronDown, ChevronUp, Filter } from 'lucide-react';
 import { Button } from '../components/Button';
 
 export const ProductListingPage: React.FC = () => {
@@ -22,6 +23,9 @@ export const ProductListingPage: React.FC = () => {
   const [priceRange, setPriceRange] = useState({ min: 0, max: 5000 });
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc' | 'default'>('default');
+  
+  // Category UI State
+  const [showAllCategories, setShowAllCategories] = useState(false);
 
   // Fetch Products
   useEffect(() => {
@@ -51,6 +55,18 @@ export const ProductListingPage: React.FC = () => {
         setSelectedCategories([]);
     }
   }, [categorySlug]);
+
+  // Derive unique categories dynamically from the database products
+  const uniqueCategories = useMemo(() => {
+    const categories = new Set<string>();
+    // Add categories from constants first to ensure order/presence
+    CATEGORIES.forEach(c => categories.add(c.name));
+    // Add any extra categories found in DB
+    allProducts.forEach(p => categories.add(p.category));
+    return Array.from(categories).sort();
+  }, [allProducts]);
+
+  const displayedCategories = showAllCategories ? uniqueCategories : uniqueCategories.slice(0, 5);
 
   const filteredProducts = allProducts.filter(product => {
     // Text Search
@@ -141,22 +157,35 @@ export const ProductListingPage: React.FC = () => {
             <div>
                 <h3 className="font-black text-gray-900 mb-4 uppercase text-sm tracking-wider border-b border-gray-100 pb-2">Kategorie</h3>
                 <div className="space-y-3">
-                    {CATEGORIES.map(cat => (
-                        <label key={cat.id} className="flex items-center gap-3 cursor-pointer group p-2 hover:bg-gray-50 rounded-lg transition-colors -ml-2">
+                    {displayedCategories.map(catName => (
+                        <label key={catName} className="flex items-center gap-3 cursor-pointer group p-2 hover:bg-gray-50 rounded-lg transition-colors -ml-2">
                             <div className="relative flex items-center">
                                 <input 
                                     type="checkbox" 
-                                    checked={selectedCategories.includes(cat.name)}
-                                    onChange={() => handleCategoryChange(cat.name)}
+                                    checked={selectedCategories.includes(catName)}
+                                    onChange={() => handleCategoryChange(catName)}
                                     className="peer h-5 w-5 cursor-pointer appearance-none rounded-md border-2 border-gray-300 transition-all checked:border-yellow-400 checked:bg-yellow-400 hover:border-yellow-400"
                                 />
                                 <svg className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-white opacity-0 transition-opacity peer-checked:opacity-100" width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M10 3L4.5 8.5L2 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                                 </svg>
                             </div>
-                            <span className={`text-sm font-medium transition-colors ${selectedCategories.includes(cat.name) ? 'text-gray-900 font-bold' : 'text-gray-600 group-hover:text-gray-900'}`}>{cat.name}</span>
+                            <span className={`text-sm font-medium transition-colors ${selectedCategories.includes(catName) ? 'text-gray-900 font-bold' : 'text-gray-600 group-hover:text-gray-900'}`}>{catName}</span>
                         </label>
                     ))}
+                    
+                    {uniqueCategories.length > 5 && (
+                        <button 
+                            onClick={() => setShowAllCategories(!showAllCategories)}
+                            className="text-sm font-bold text-blue-600 hover:text-blue-800 flex items-center gap-1 mt-2 p-2"
+                        >
+                            {showAllCategories ? (
+                                <>Pokaż mniej <ChevronUp size={16} /></>
+                            ) : (
+                                <>Pokaż wszystkie ({uniqueCategories.length}) <ChevronDown size={16} /></>
+                            )}
+                        </button>
+                    )}
                 </div>
             </div>
 
