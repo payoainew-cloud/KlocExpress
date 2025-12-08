@@ -1,12 +1,22 @@
 import React from 'react';
 import { useCart } from '../context/CartContext';
 import { Button } from '../components/Button';
-import { Trash2, Plus, Minus, ArrowRight } from 'lucide-react';
+import { Trash2, Plus, Minus, ArrowRight, TrendingDown } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 
 export const CartPage: React.FC = () => {
   const { items, removeFromCart, updateQuantity, cartTotal } = useCart();
   const navigate = useNavigate();
+
+  // Obliczanie oszczędności
+  const totalSavings = items.reduce((acc, item) => {
+    if (item.previousPrice && item.previousPrice > item.price) {
+      return acc + ((item.previousPrice - item.price) * item.quantity);
+    }
+    return acc;
+  }, 0);
+
+  const regularPriceTotal = cartTotal + totalSavings;
 
   if (items.length === 0) {
     return (
@@ -29,8 +39,15 @@ export const CartPage: React.FC = () => {
       <div className="flex flex-col lg:flex-row gap-8">
         {/* Items List */}
         <div className="flex-1 space-y-4">
-          {items.map((item) => (
-            <div key={item.id} className="flex gap-4 p-4 bg-white border border-gray-200 rounded-xl shadow-sm">
+          {items.map((item) => {
+             const hasItemDiscount = item.previousPrice && item.previousPrice > item.price;
+             return (
+            <div key={item.id} className="flex gap-4 p-4 bg-white border border-gray-200 rounded-xl shadow-sm relative overflow-hidden">
+              {hasItemDiscount && (
+                  <div className="absolute top-0 left-0 bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-br-lg z-10">
+                      PROMOCJA
+                  </div>
+              )}
               <div className="w-24 h-24 bg-gray-50 rounded-lg p-2 flex-shrink-0">
                 <img src={item.image} alt={item.name} className="w-full h-full object-contain" />
               </div>
@@ -66,25 +83,48 @@ export const CartPage: React.FC = () => {
                     </button>
                   </div>
                   <div className="text-right">
-                    <p className="font-black text-lg">{(item.price * item.quantity).toFixed(2)} zł</p>
-                    <p className="text-xs text-gray-500">{item.price.toFixed(2)} zł / szt.</p>
+                    {hasItemDiscount && (
+                        <p className="text-xs text-gray-400 line-through">
+                            {(item.previousPrice! * item.quantity).toFixed(2)} zł
+                        </p>
+                    )}
+                    <p className={`font-black text-lg ${hasItemDiscount ? 'text-red-600' : 'text-gray-900'}`}>
+                        {(item.price * item.quantity).toFixed(2)} zł
+                    </p>
+                    {hasItemDiscount ? (
+                         <p className="text-xs text-red-500 font-bold">
+                            Oszczędzasz {((item.previousPrice! - item.price) * item.quantity).toFixed(2)} zł
+                         </p>
+                    ) : (
+                        <p className="text-xs text-gray-500">{item.price.toFixed(2)} zł / szt.</p>
+                    )}
                   </div>
                 </div>
               </div>
             </div>
-          ))}
+          )})}
         </div>
 
         {/* Summary */}
         <div className="w-full lg:w-96">
-            <div className="bg-gray-50 p-6 rounded-xl sticky top-24">
+            <div className="bg-gray-50 p-6 rounded-xl sticky top-24 border border-gray-100 shadow-sm">
                 <h3 className="font-bold text-xl mb-6">Podsumowanie</h3>
                 
                 <div className="space-y-3 mb-6">
                     <div className="flex justify-between text-gray-600">
                         <span>Wartość produktów</span>
-                        <span>{cartTotal.toFixed(2)} zł</span>
+                        <span className={totalSavings > 0 ? "line-through text-gray-400" : ""}>
+                            {regularPriceTotal.toFixed(2)} zł
+                        </span>
                     </div>
+                    
+                    {totalSavings > 0 && (
+                        <div className="flex justify-between text-red-600 font-bold bg-red-100/50 p-2 rounded-lg items-center">
+                            <span className="flex items-center gap-1"><TrendingDown size={16}/> Oszczędzasz</span>
+                            <span>-{totalSavings.toFixed(2)} zł</span>
+                        </div>
+                    )}
+
                     <div className="flex justify-between text-gray-600">
                         <span>Dostawa</span>
                         <span className="text-green-600 font-medium">Gratis</span>
