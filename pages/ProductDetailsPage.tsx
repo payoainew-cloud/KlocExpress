@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { supabase, mapProductFromDB } from '../lib/supabaseClient';
@@ -84,25 +85,36 @@ export const ProductDetailsPage: React.FC = () => {
   const isLiked = isInWishlist(product.id);
 
   return (
-    <div className="bg-white min-h-screen pb-20 selection:bg-orange-100 selection:text-orange-900">
-      {/* Navigation Bar */}
-      <div className="border-b border-slate-100 bg-white/80 backdrop-blur-md sticky top-20 z-40 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 md:px-8 py-4 flex items-center gap-2 text-sm">
-            <Link to="/produkty" className="text-slate-500 hover:text-slate-900 transition-colors flex items-center gap-1 font-semibold">
-                <ArrowLeft size={16} /> Sklep
-            </Link>
-            <span className="text-slate-300">/</span>
-            <Link to={`/produkty?category=${product.category}`} className="text-slate-500 hover:text-slate-900 transition-colors font-semibold">
-                {product.category}
-            </Link>
-        </div>
+    <div className="bg-slate-50/50 min-h-screen pb-20 selection:bg-orange-100 selection:text-orange-900">
+      
+      {/* Navigation Bar - Static */}
+      <div className="max-w-7xl mx-auto px-4 md:px-8 pt-8 pb-2">
+          <div className="flex items-center gap-3">
+             {/* Back Button as Rounded Square */}
+             <Link 
+                to="/produkty" 
+                className="w-12 h-12 flex items-center justify-center rounded-2xl bg-white border-2 border-slate-50 shadow-sm text-slate-400 hover:text-slate-900 hover:border-slate-200 transition-all duration-300 hover:-translate-x-1"
+                title="Wróć do listy"
+             >
+                <ArrowLeft size={22} strokeWidth={2.5} />
+             </Link>
+             
+             {/* Breadcrumbs Pill */}
+             <div className="hidden sm:flex items-center gap-2 px-5 h-12 rounded-2xl bg-white border-2 border-slate-50 shadow-sm text-sm font-bold text-slate-400">
+                <Link to="/produkty" className="hover:text-slate-900 transition-colors">Sklep</Link>
+                <span className="text-slate-200">/</span>
+                <Link to={`/produkty?category=${product.category}`} className="text-slate-900 hover:text-orange-600 transition-colors">
+                    {product.category}
+                </Link>
+             </div>
+          </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 md:px-8 py-12">
+      <div className="max-w-7xl mx-auto px-4 md:px-8 py-4">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 xl:gap-24 items-start">
             
             {/* --- Left: Immersive Image Section --- */}
-            <div className="lg:col-span-7 sticky top-40">
+            <div className="lg:col-span-7 sticky top-32">
                 <div className={`relative aspect-square rounded-[2.5rem] overflow-hidden flex items-center justify-center group shadow-2xl shadow-slate-200/50 ${isBlackWeek ? 'bg-slate-900 border-4 border-slate-800' : 'bg-white border border-slate-100'}`}>
                     
                     {/* Background Radial Gradient - Studio Light Effect */}
