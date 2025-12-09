@@ -3,12 +3,14 @@ import { HashRouter as Router, Routes, Route, useLocation } from 'react-router-d
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { CartProvider } from './context/CartContext';
+import { WishlistProvider } from './context/WishlistContext';
 import { HomePage } from './pages/HomePage';
 import { ProductListingPage } from './pages/ProductListingPage';
 import { ProductDetailsPage } from './pages/ProductDetailsPage';
 import { CartPage } from './pages/CartPage';
 import { CheckoutPage } from './pages/CheckoutPage';
 import { BlackWeekPage } from './pages/BlackWeekPage';
+import { WishlistPage } from './pages/WishlistPage';
 
 // Scroll to top on route change wrapper
 const ScrollToTop = () => {
@@ -22,27 +24,30 @@ const ScrollToTop = () => {
 function App() {
   return (
     <CartProvider>
-      <Router>
-        <div className="min-h-screen bg-white font-sans text-gray-900 selection:bg-yellow-200 selection:text-red-900 flex flex-col">
-          <ScrollToTop />
-          <Header />
-          
-          <main className="flex-grow">
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/produkty" element={<ProductListingPage />} />
-              <Route path="/produkt/:id" element={<ProductDetailsPage />} />
-              <Route path="/koszyk" element={<CartPage />} />
-              <Route path="/checkout" element={<CheckoutPage />} />
-              <Route path="/black-week" element={<BlackWeekPage />} />
-              {/* Fallback for other pages */}
-              <Route path="*" element={<HomePage />} />
-            </Routes>
-          </main>
+      <WishlistProvider>
+        <Router>
+          <div className="min-h-screen bg-white font-sans text-slate-900 selection:bg-yellow-200 selection:text-orange-900 flex flex-col">
+            <ScrollToTop />
+            <Header />
+            
+            <main className="flex-grow">
+              <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/produkty" element={<ProductListingPage />} />
+                <Route path="/produkt/:id" element={<ProductDetailsPage />} />
+                <Route path="/koszyk" element={<CartPage />} />
+                <Route path="/checkout" element={<CheckoutPage />} />
+                <Route path="/black-week" element={<BlackWeekPage />} />
+                <Route path="/ulubione" element={<WishlistPage />} />
+                {/* Fallback for other pages */}
+                <Route path="*" element={<HomePage />} />
+              </Routes>
+            </main>
 
-          <Footer />
-        </div>
-      </Router>
+            <Footer />
+          </div>
+        </Router>
+      </WishlistProvider>
     </CartProvider>
   );
 }

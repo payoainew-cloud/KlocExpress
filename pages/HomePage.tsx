@@ -4,7 +4,7 @@ import { ProductSection } from '../components/ProductSection';
 import { BlackWeekSection } from '../components/BlackWeekSection';
 import { supabase, mapProductFromDB } from '../lib/supabaseClient';
 import { Product } from '../types';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Truck } from 'lucide-react';
 
 export const HomePage: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -36,7 +36,7 @@ export const HomePage: React.FC = () => {
   if (loading) {
       return (
           <div className="flex h-screen items-center justify-center">
-              <Loader2 className="animate-spin text-red-600 w-12 h-12" />
+              <Loader2 className="animate-spin text-orange-600 w-12 h-12" />
           </div>
       );
   }
@@ -48,7 +48,7 @@ export const HomePage: React.FC = () => {
       {/* Black Week Section */}
       {blackWeekProducts.length > 0 && <BlackWeekSection products={blackWeekProducts} />}
 
-      <div className="bg-yellow-50/50 space-y-8 pb-12">
+      <div className="bg-white space-y-12 pb-16 pt-8">
         {starWarsProducts.length > 0 && (
             <>
                 <ProductSection 
@@ -56,9 +56,10 @@ export const HomePage: React.FC = () => {
                 products={starWarsProducts} 
                 categorySlug="star-wars"
                 />
-                <div className="max-w-7xl mx-auto px-4"><div className="h-px bg-gray-200"></div></div>
             </>
         )}
+
+        <div className="max-w-7xl mx-auto px-4"><div className="h-px bg-slate-100"></div></div>
 
         {cityProducts.length > 0 && (
             <>
@@ -67,9 +68,10 @@ export const HomePage: React.FC = () => {
                 products={cityProducts} 
                 categorySlug="city"
                 />
-                <div className="max-w-7xl mx-auto px-4"><div className="h-px bg-gray-200"></div></div>
             </>
         )}
+
+        <div className="max-w-7xl mx-auto px-4"><div className="h-px bg-slate-100"></div></div>
 
         {technicProducts.length > 0 && (
             <ProductSection 
@@ -80,18 +82,26 @@ export const HomePage: React.FC = () => {
         )}
       </div>
 
-      {/* Newsletter Banner */}
-      <div className="bg-blue-600 text-white py-16 px-4">
-         <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-3xl font-black mb-4">Dołącz do KlockoKlubu!</h2>
-            <p className="mb-8 text-blue-100 text-lg">Zapisz się do newslettera i odbierz 10% rabatu na pierwsze zamówienie.</p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto">
+      {/* Newsletter Banner - Updated to Dark Theme */}
+      <div className="bg-slate-900 text-white py-20 px-4 relative overflow-hidden">
+         {/* Decorative elements */}
+         <div className="absolute top-0 right-0 w-64 h-64 bg-orange-600/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+         
+         <div className="max-w-4xl mx-auto text-center relative z-10">
+            <div className="inline-flex items-center justify-center p-3 bg-slate-800 rounded-full mb-6">
+                <Truck className="text-orange-500" size={24} />
+            </div>
+            <h2 className="text-3xl md:text-4xl font-black mb-4 tracking-tight">Dołącz do Kloc-Express VIP</h2>
+            <p className="mb-8 text-slate-300 text-lg max-w-xl mx-auto">
+                Bądź na bieżąco z premierami. Zapisz się do newslettera i odbierz <strong>darmową dostawę</strong> na pierwsze zamówienie.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center max-w-md mx-auto">
                <input 
                   type="email" 
                   placeholder="Twój adres email" 
-                  className="flex-1 px-4 py-3 rounded-lg text-gray-900 focus:outline-none focus:ring-4 focus:ring-yellow-400"
+                  className="flex-1 px-5 py-3.5 rounded-xl text-slate-900 font-medium focus:outline-none focus:ring-4 focus:ring-orange-500/50 placeholder-slate-400"
                />
-               <button className="bg-yellow-400 text-red-900 font-bold px-8 py-3 rounded-lg hover:bg-yellow-300 transition-colors">
+               <button className="bg-orange-600 text-white font-bold px-8 py-3.5 rounded-xl hover:bg-orange-500 transition-all shadow-lg shadow-orange-900/20 active:scale-95">
                   Zapisz się
                </button>
             </div>

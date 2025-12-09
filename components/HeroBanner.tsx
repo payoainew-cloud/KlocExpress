@@ -1,7 +1,6 @@
-
 import React, { useEffect, useState } from 'react';
 import { Button } from './Button';
-import { ArrowRight, Loader2 } from 'lucide-react';
+import { ArrowRight, Loader2, Truck } from 'lucide-react';
 import { supabase, mapBannerFromDB } from '../lib/supabaseClient';
 import { Banner } from '../types';
 import { Link } from 'react-router-dom';
@@ -37,64 +36,64 @@ export const HeroBanner: React.FC = () => {
     fetchBanner();
   }, []);
 
-  // Fallback content if DB is empty or loading failed (prevents empty white box)
+  // Fallback content updated for Kloc-Express
   const content = banner || {
-    subtitle: 'Nowa Kolekcja 2024',
-    titleMain: 'Zbuduj Swoje',
-    titleHighlight: 'Marzenia',
-    description: 'Odkryj najnowsze zestawy LEGO® Star Wars™, City i Technic. Rozwiń swoją kreatywność bez granic.',
+    subtitle: 'Ekspresowa Dostawa 24h',
+    titleMain: 'Kloc-Express',
+    titleHighlight: 'Buduj Szybciej',
+    description: 'Największy wybór klocków LEGO® z błyskawiczną wysyłką. Zamów do 14:00, wyślemy dzisiaj! Star Wars, City, Technic i więcej.',
     imageUrl: 'https://picsum.photos/1920/1080',
-    buttonText: 'Odkryj Nowości',
+    buttonText: 'Rozpocznij zakupy',
     buttonLink: '/produkty'
   };
 
   if (loading) {
       return (
-        <div className="w-full h-[500px] md:h-[600px] bg-gray-900 flex items-center justify-center">
-            <Loader2 className="animate-spin text-yellow-400 w-12 h-12" />
+        <div className="w-full h-[500px] md:h-[600px] bg-slate-900 flex items-center justify-center">
+            <Loader2 className="animate-spin text-orange-500 w-12 h-12" />
         </div>
       );
   }
 
   return (
-    <div className="relative w-full h-[500px] md:h-[600px] overflow-hidden bg-gray-900">
+    <div className="relative w-full h-[500px] md:h-[600px] overflow-hidden bg-slate-900">
       {/* Background Image */}
       <div 
         className="absolute inset-0 bg-cover bg-center transition-opacity duration-700"
         style={{ 
             backgroundImage: `url('${content.imageUrl}')`,
-            filter: 'brightness(0.6)'
+            filter: 'brightness(0.5) saturate(1.1)'
         }}
       ></div>
       
       {/* Overlay Gradient */}
-      <div className="absolute inset-0 bg-gradient-to-r from-gray-900 via-gray-900/60 to-transparent opacity-90"></div>
+      <div className="absolute inset-0 bg-gradient-to-r from-slate-900 via-slate-900/70 to-transparent opacity-95"></div>
 
       {/* Content */}
       <div className="relative z-10 h-full max-w-7xl mx-auto px-4 md:px-8 flex flex-col justify-center items-start">
         {content.subtitle && (
-            <span className="bg-yellow-400 text-red-900 font-bold px-4 py-1 rounded-full mb-6 text-sm uppercase tracking-widest shadow-lg transform -rotate-2 animate-fade-in-up">
-                {content.subtitle}
+            <span className="bg-orange-600 text-white font-black px-4 py-1.5 rounded-r-full border-l-4 border-yellow-400 mb-6 text-sm uppercase tracking-widest shadow-lg flex items-center gap-2 animate-fade-in-up">
+                <Truck size={16} /> {content.subtitle}
             </span>
         )}
         
-        <h1 className="text-5xl md:text-7xl font-black text-white mb-6 leading-tight max-w-3xl drop-shadow-lg">
+        <h1 className="text-5xl md:text-7xl font-black text-white mb-6 leading-tight max-w-3xl drop-shadow-2xl">
           {content.titleMain} <br/>
-          <span className="text-yellow-400">{content.titleHighlight}</span>
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-500">{content.titleHighlight}</span>
         </h1>
         
-        <p className="text-lg md:text-xl text-gray-200 mb-8 max-w-lg leading-relaxed">
+        <p className="text-lg md:text-xl text-slate-300 mb-8 max-w-lg leading-relaxed font-medium">
           {content.description}
         </p>
         
         <div className="flex flex-col sm:flex-row gap-4">
           <Link to={content.buttonLink}>
-              <Button variant="primary" size="lg" className="shadow-yellow-500/20 w-full sm:w-auto">
+              <Button variant="primary" size="lg" className="shadow-orange-500/20 w-full sm:w-auto bg-yellow-400 text-slate-900 hover:bg-yellow-300">
                 {content.buttonText} <ArrowRight className="ml-2 w-5 h-5" />
               </Button>
           </Link>
           <Link to="/produkty?filter=promo">
-              <Button variant="outline" size="lg" className="text-white border-white hover:bg-white hover:text-gray-900 w-full sm:w-auto">
+              <Button variant="outline" size="lg" className="text-white border-2 border-slate-600 hover:border-white hover:bg-white hover:text-slate-900 w-full sm:w-auto">
                 Sprawdź Promocje
               </Button>
           </Link>
