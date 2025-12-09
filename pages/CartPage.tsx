@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
 import { Button } from '../components/Button';
@@ -16,6 +16,7 @@ export const CartPage: React.FC = () => {
   const [appliedDiscount, setAppliedDiscount] = useState(0);
   const [isGiftWrapped, setIsGiftWrapped] = useState(false);
   const [promoError, setPromoError] = useState('');
+  const [successMsg, setSuccessMsg] = useState('');
 
   // --- Constants ---
   const FREE_SHIPPING_THRESHOLD = 500;
@@ -27,17 +28,58 @@ export const CartPage: React.FC = () => {
   const missingForFreeShipping = FREE_SHIPPING_THRESHOLD - cartTotal;
   const shippingProgress = Math.min(100, (cartTotal / FREE_SHIPPING_THRESHOLD) * 100);
   
-  const finalTotal = cartTotal + (isGiftWrapped ? GIFT_WRAP_PRICE : 0) + shippingCost - appliedDiscount;
+  const finalTotal = Math.max(0, cartTotal + (isGiftWrapped ? GIFT_WRAP_PRICE : 0) + shippingCost - appliedDiscount);
+
+  // --- Effects ---
+  // Auto-apply code from Advent Calendar or other sources
+  useEffect(() => {
+    const autoCode = localStorage.getItem('auto_apply_promo');
+    if (autoCode) {
+        setPromoCode(autoCode);
+        validatePromoCode(autoCode);
+        localStorage.removeItem('auto_apply_promo'); // Clear after applying
+    }
+  }, [cartTotal]); // Re-run if cart total changes (to recalculate % based discount)
 
   // --- Handlers ---
-  const handleApplyPromo = () => {
-    if (promoCode.toUpperCase() === 'LEGO') {
+  const validatePromoCode = (code: string) => {
+    const normalizedCode = code.trim().toUpperCase();
+    setPromoError('');
+    setSuccessMsg('');
+    setAppliedDiscount(0);
+
+    // 1. Standard Static Codes
+    if (normalizedCode === 'LEGO') {
         setAppliedDiscount(cartTotal * 0.1); // 10% off
-        setPromoError('');
-    } else {
-        setAppliedDiscount(0);
-        setPromoError('Nieprawidłowy kod rabatowy');
+        setSuccessMsg('Kod LEGO aktywny: -10%');
+        return;
     }
+
+    // 2. Advent Calendar Dynamic Codes
+    const adventState = localStorage.getItem('lego_advent_state');
+    if (adventState) {
+        try {
+            const unlockedPrizes = JSON.parse(adventState);
+            // Find if the code exists in the user's unlocked prizes
+            const validPrize = unlockedPrizes.find((p: any) => p.code === normalizedCode || p.code === code); // Check both cases
+            
+            if (validPrize) {
+                const discountAmount = cartTotal * (validPrize.discount / 100);
+                setAppliedDiscount(discountAmount);
+                setSuccessMsg(`Kod z Kalendarza (${normalizedCode}): -${validPrize.discount}%`);
+                return;
+            }
+        } catch (e) {
+            console.error("Error parsing advent state", e);
+        }
+    }
+
+    // Invalid
+    setPromoError('Nieprawidłowy kod rabatowy lub kod wygasł.');
+  };
+
+  const handleApplyPromo = () => {
+      validatePromoCode(promoCode);
   };
 
   const handleMoveToWishlist = (product: any) => {
@@ -216,6 +258,7 @@ export const CartPage: React.FC = () => {
                                     className="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold focus:outline-none focus:border-yellow-400 transition-colors uppercase placeholder:normal-case"
                                     value={promoCode}
                                     onChange={(e) => setPromoCode(e.target.value)}
+                                    onKeyDown={(e) => e.key === 'Enter' && handleApplyPromo()}
                                 />
                             </div>
                             <button 
@@ -225,8 +268,8 @@ export const CartPage: React.FC = () => {
                                 Użyj
                             </button>
                         </div>
-                        {appliedDiscount > 0 && <p className="text-xs text-green-600 font-bold mt-2 flex items-center gap-1"><CheckCircle2 size={12}/> Kod aktywny! -10%</p>}
-                        {promoError && <p className="text-xs text-red-500 font-bold mt-2">{promoError}</p>}
+                        {successMsg && <p className="text-xs text-green-600 font-bold mt-2 flex items-center gap-1 animate-fade-in"><CheckCircle2 size={12}/> {successMsg}</p>}
+                        {promoError && <p className="text-xs text-red-500 font-bold mt-2 animate-pulse">{promoError}</p>}
                     </div>
 
                     {/* Gift Option */}
@@ -258,7 +301,7 @@ export const CartPage: React.FC = () => {
                             </div>
                         )}
                         {appliedDiscount > 0 && (
-                             <div className="flex justify-between text-red-600 text-sm bg-red-50 p-2 rounded-lg">
+                             <div className="flex justify-between text-red-600 text-sm bg-red-50 p-2 rounded-lg border border-red-100">
                                 <span className="font-bold">Rabat</span>
                                 <span className="font-bold">-{appliedDiscount.toFixed(2)} zł</span>
                             </div>

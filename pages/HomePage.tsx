@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { HeroBanner } from '../components/HeroBanner';
 import { BlackWeekSection } from '../components/BlackWeekSection';
+import { AppleSection } from '../components/AppleSection';
 import { supabase, mapProductFromDB } from '../lib/supabaseClient';
 import { Product } from '../types';
 import { Loader2, Truck, ShieldCheck, RefreshCw, ArrowRight, Package, Star, Zap } from 'lucide-react';
@@ -48,6 +49,9 @@ export const HomePage: React.FC = () => {
     <main className="bg-slate-50/50">
       <HeroBanner />
       
+      {/* Apple Collaboration Teaser */}
+      <AppleSection />
+
       {/* Trust Badges Strip */}
       <div className="bg-white border-b border-slate-100 py-6 md:py-8">
         <div className="max-w-7xl mx-auto px-4 md:px-8 grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 text-center md:text-left">

@@ -1,4 +1,5 @@
 
+
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { supabase, mapProductFromDB } from '../lib/supabaseClient';
@@ -193,8 +194,8 @@ export const ProductDetailsPage: React.FC = () => {
                     </div>
                 </div>
 
-                {/* Desktop Action Area */}
-                <div className="mt-auto space-y-6 hidden md:block">
+                {/* Action Area - Visible on all devices now */}
+                <div className="mt-8 md:mt-auto space-y-6">
                     <div className="flex gap-4">
                         <Button 
                             size="lg" 
@@ -265,7 +266,7 @@ export const ProductDetailsPage: React.FC = () => {
       </div>
 
       {/* --- Mobile Sticky Bottom Action Bar --- */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 p-3 bg-white border-t border-slate-100 shadow-[0_-5px_20px_rgba(0,0,0,0.05)] z-50 flex gap-3 items-center safe-area-pb">
+      <div className="md:hidden fixed bottom-0 left-0 right-0 p-3 bg-white border-t border-slate-100 shadow-[0_-5px_20px_rgba(0,0,0,0.05)] z-[80] flex gap-3 items-center" style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 0.75rem)' }}>
         <button 
             className={`h-14 w-14 flex items-center justify-center rounded-2xl border-2 transition-colors ${isLiked ? 'border-red-100 bg-red-50 text-red-500' : 'border-slate-100 bg-slate-50 text-slate-400'}`}
             onClick={() => toggleWishlist(product.id)}

@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { Search, ShoppingBag, User, Menu, X, Truck, ShieldCheck, Clock, Zap, Heart, ChevronDown, Package, LayoutGrid, ArrowRight, Layers } from 'lucide-react';
+import { Search, ShoppingBag, User, Menu, X, Truck, ShieldCheck, Clock, Zap, Heart, ChevronDown, Package, LayoutGrid, ArrowRight, Layers, Cpu, Gift } from 'lucide-react';
 import { Button } from './Button';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
@@ -107,6 +107,12 @@ export const Header: React.FC = () => {
             </Link>
         </div>
 
+        <Link to="/kalendarz" className="group flex items-center justify-center gap-2 p-4 mt-2 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-2xl font-black uppercase tracking-wide hover:shadow-lg transition-all active:scale-[0.98]">
+            <Gift size={18} className="text-yellow-300 group-hover:rotate-12 transition-transform" /> Kalendarz Adwentowy
+        </Link>
+        <Link to="/apple-zone" className="group flex items-center justify-center gap-2 p-4 mt-2 bg-black text-white rounded-2xl font-black uppercase tracking-wide hover:bg-gray-900 transition-all shadow-lg active:scale-[0.98]">
+            <Cpu size={18} className="text-gray-400 group-hover:text-white transition-colors" /> Apple x LEGO
+        </Link>
         <Link to="/black-week" className="group flex items-center justify-center gap-2 p-4 mt-2 bg-slate-900 text-white rounded-2xl font-black uppercase tracking-wide hover:bg-black transition-all shadow-lg shadow-slate-900/20 active:scale-[0.98]">
             <Zap size={18} className="text-yellow-400 fill-yellow-400 group-hover:animate-pulse" /> Black Week
         </Link>
@@ -356,9 +362,17 @@ export const Header: React.FC = () => {
                     <span className="absolute bottom-3 left-0 w-0 h-0.5 bg-red-600 group-hover:w-full transition-all duration-300"></span>
                   </Link>
                   
-                  <Link to="/black-week" className="flex items-center gap-2 text-white bg-slate-900 px-5 py-2 rounded-full hover:bg-black hover:shadow-lg hover:shadow-yellow-400/20 transition-all uppercase text-xs ml-auto active:scale-95">
-                      <Zap size={14} className="text-yellow-400 fill-yellow-400 animate-pulse" /> Black Week
-                  </Link>
+                  <div className="ml-auto flex items-center gap-3">
+                    <Link to="/kalendarz" className="flex items-center gap-2 text-red-700 bg-red-50 border border-red-100 px-4 py-2 rounded-full hover:bg-red-100 transition-all uppercase text-xs active:scale-95">
+                        <Gift size={14} className="text-red-500" /> Kalendarz
+                    </Link>
+                    <Link to="/apple-zone" className="flex items-center gap-2 text-white bg-black px-4 py-2 rounded-full hover:bg-gray-800 transition-all uppercase text-xs active:scale-95 shadow-md">
+                        <Cpu size={14} className="text-gray-400" /> Apple x LEGO
+                    </Link>
+                    <Link to="/black-week" className="flex items-center gap-2 text-white bg-slate-900 px-5 py-2 rounded-full hover:bg-black hover:shadow-lg hover:shadow-yellow-400/20 transition-all uppercase text-xs active:scale-95">
+                        <Zap size={14} className="text-yellow-400 fill-yellow-400 animate-pulse" /> Black Week
+                    </Link>
+                  </div>
               </nav>
           </div>
         </div>

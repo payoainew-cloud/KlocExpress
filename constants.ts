@@ -1,3 +1,4 @@
+
 import { Product, Category } from './types';
 
 export const CATEGORIES: Category[] = [
@@ -5,6 +6,7 @@ export const CATEGORIES: Category[] = [
   { id: '2', name: 'LEGO City', slug: 'city' },
   { id: '3', name: 'LEGO Technic', slug: 'technic' },
   { id: '4', name: 'LEGO Icons', slug: 'icons' },
+  { id: '5', name: 'LEGO x Apple', slug: 'lego-apple' },
 ];
 
 export const MOCK_PRODUCTS: Product[] = [

@@ -5,7 +5,7 @@ import { ProductCard } from '../components/ProductCard';
 import { CATEGORIES } from '../constants';
 import { supabase, mapProductFromDB } from '../lib/supabaseClient';
 import { Product } from '../types';
-import { SlidersHorizontal, X, Loader2, ChevronDown, ChevronUp, Filter } from 'lucide-react';
+import { SlidersHorizontal, X, Loader2, ChevronDown, ChevronUp, Filter, Infinity as InfinityIcon } from 'lucide-react';
 import { Button } from '../components/Button';
 
 export const ProductListingPage: React.FC = () => {
@@ -18,9 +18,12 @@ export const ProductListingPage: React.FC = () => {
   const [allProducts, setAllProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // Constants
+  const MAX_PRICE_SLIDER_VALUE = 10000;
+
   // Filter State
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const [priceRange, setPriceRange] = useState({ min: 0, max: 5000 });
+  const [priceRange, setPriceRange] = useState({ min: 0, max: MAX_PRICE_SLIDER_VALUE });
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc' | 'default'>('default');
   
@@ -84,7 +87,11 @@ export const ProductListingPage: React.FC = () => {
     if (filterType === 'promo' && !product.isPromo) return false;
 
     // Price Filter
-    if (product.price < priceRange.min || product.price > priceRange.max) {
+    // Min check
+    if (product.price < priceRange.min) return false;
+    
+    // Max check - if slider is at MAX, we consider it "Infinity" (no upper limit)
+    if (priceRange.max < MAX_PRICE_SLIDER_VALUE && product.price > priceRange.max) {
       return false;
     }
 
@@ -101,6 +108,12 @@ export const ProductListingPage: React.FC = () => {
         ? prev.filter(c => c !== categoryName)
         : [...prev, categoryName]
     );
+  };
+
+  const handleClearFilters = () => {
+    setPriceRange({ min: 0, max: MAX_PRICE_SLIDER_VALUE });
+    setSelectedCategories([]);
+    setSortOrder('default');
   };
 
   return (
@@ -199,32 +212,47 @@ export const ProductListingPage: React.FC = () => {
                         onChange={(e) => setPriceRange({...priceRange, min: Number(e.target.value)})}
                         className="w-full p-3 bg-gray-100 border-2 border-transparent rounded-xl text-sm font-bold text-gray-900 focus:bg-white focus:border-yellow-400 focus:outline-none transition-colors"
                         placeholder="Od"
+                        min={0}
                     />
                     <span className="text-gray-400 font-bold">-</span>
-                    <input 
-                        type="number" 
-                        value={priceRange.max}
-                        onChange={(e) => setPriceRange({...priceRange, max: Number(e.target.value)})}
-                        className="w-full p-3 bg-gray-100 border-2 border-transparent rounded-xl text-sm font-bold text-gray-900 focus:bg-white focus:border-yellow-400 focus:outline-none transition-colors"
-                        placeholder="Do"
-                    />
+                    {priceRange.max >= MAX_PRICE_SLIDER_VALUE ? (
+                        <div className="w-full p-3 bg-gray-100 border-2 border-transparent rounded-xl text-sm font-bold text-gray-900 flex items-center justify-center">
+                            <InfinityIcon size={18} />
+                        </div>
+                    ) : (
+                        <input 
+                            type="number" 
+                            value={priceRange.max}
+                            onChange={(e) => setPriceRange({...priceRange, max: Number(e.target.value)})}
+                            className="w-full p-3 bg-gray-100 border-2 border-transparent rounded-xl text-sm font-bold text-gray-900 focus:bg-white focus:border-yellow-400 focus:outline-none transition-colors"
+                            placeholder="Do"
+                        />
+                    )}
                 </div>
                 <input 
                     type="range" 
-                    min="0" max="5000" step="50"
+                    min="0" max={MAX_PRICE_SLIDER_VALUE} step="50"
                     value={priceRange.max}
                     onChange={(e) => setPriceRange({...priceRange, max: Number(e.target.value)})}
                     className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-yellow-400"
                 />
                 <div className="flex justify-between text-xs text-gray-500 font-bold mt-2">
                     <span>0 zł</span>
-                    <span>5000+ zł</span>
+                    <span>{MAX_PRICE_SLIDER_VALUE}+ zł</span>
                 </div>
             </div>
             
             <Button className="w-full lg:hidden bg-yellow-400 text-black font-black" onClick={() => setShowMobileFilters(false)}>
                 Zastosuj filtry
             </Button>
+
+            {/* Reset Filters Desktop */}
+            <button 
+                onClick={handleClearFilters}
+                className="hidden lg:block w-full py-2 text-sm text-gray-400 hover:text-gray-900 font-bold transition-colors border border-gray-200 hover:border-gray-900 rounded-lg"
+            >
+                Wyczyść filtry
+            </button>
           </div>
         </aside>
 
@@ -244,10 +272,7 @@ export const ProductListingPage: React.FC = () => {
                 <div className="text-center py-16 bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200">
                     <p className="text-xl text-gray-500 font-bold mb-2">Nie znaleziono klocków</p>
                     <p className="text-gray-400 mb-6">Spróbuj zmienić kryteria wyszukiwania.</p>
-                    <Button variant="outline" onClick={() => {
-                        setPriceRange({min: 0, max: 5000});
-                        setSelectedCategories([]);
-                    }}>
+                    <Button variant="outline" onClick={handleClearFilters}>
                         Wyczyść filtry
                     </Button>
                 </div>

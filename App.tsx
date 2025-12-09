@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { HashRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { Header } from './components/Header';
@@ -11,6 +12,8 @@ import { CartPage } from './pages/CartPage';
 import { CheckoutPage } from './pages/CheckoutPage';
 import { BlackWeekPage } from './pages/BlackWeekPage';
 import { WishlistPage } from './pages/WishlistPage';
+import { AppleZonePage } from './pages/AppleZonePage';
+import { AdventCalendarPage } from './pages/AdventCalendarPage';
 
 // Scroll to top on route change wrapper
 const ScrollToTop = () => {
@@ -42,6 +45,8 @@ function App() {
                 <Route path="/checkout" element={<CheckoutPage />} />
                 <Route path="/black-week" element={<BlackWeekPage />} />
                 <Route path="/ulubione" element={<WishlistPage />} />
+                <Route path="/apple-zone" element={<AppleZonePage />} />
+                <Route path="/kalendarz" element={<AdventCalendarPage />} />
                 {/* Fallback for other pages */}
                 <Route path="*" element={<HomePage />} />
               </Routes>

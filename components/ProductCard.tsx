@@ -44,7 +44,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const priceColor = isBlackWeek ? "text-yellow-400" : "text-slate-900";
   
   // Image Container & Winter Frame Logic
-  const imageContainerBase = "relative aspect-[4/3] w-full overflow-hidden transition-all duration-500";
+  const imageContainerBase = "relative aspect-[4/3] w-full overflow-hidden transition-all duration-500 block";
   const imageContainerStyle = isBlackWeek 
     ? "bg-slate-800 border-2 md:border-4 border-blue-200/20 shadow-[inset_0_0_20px_rgba(147,197,253,0.1)] rounded-t-2xl md:rounded-t-3xl" // Winter Frame
     : "bg-gray-50 rounded-t-2xl md:rounded-t-3xl"; // Standard
@@ -53,29 +53,31 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     <div className={`group relative rounded-2xl md:rounded-3xl flex flex-col h-full transition-all duration-500 hover:-translate-y-1.5 ${containerClasses}`}>
       
       {/* --- Image Section --- */}
-      <Link to={`/produkt/${product.id}`} className={imageContainerBase}>
-        <div className={`w-full h-full p-4 md:p-6 flex items-center justify-center ${imageContainerStyle}`}>
-            {/* Winter Decoration for Black Week */}
-            {isBlackWeek && (
-                <>
-                    <div className="absolute top-0 right-0 p-2 md:p-3 opacity-30 text-blue-200"><Snowflake size={16} className="md:w-6 md:h-6" /></div>
-                    <div className="absolute inset-0 border border-white/10 rounded-[1rem] md:rounded-[1.2rem] pointer-events-none"></div>
-                </>
-            )}
-            
-            <img
-                src={product.image}
-                alt={product.name}
-                className={`
-                    w-full h-full object-contain object-center transition-transform duration-700 group-hover:scale-110
-                    ${isBlackWeek ? 'drop-shadow-2xl' : 'mix-blend-multiply'} 
-                `}
-                loading="lazy"
-            />
-        </div>
+      <div className="relative">
+        <Link to={`/produkt/${product.id}`} className={imageContainerBase}>
+            <div className={`w-full h-full p-4 md:p-6 flex items-center justify-center ${imageContainerStyle}`}>
+                {/* Winter Decoration for Black Week */}
+                {isBlackWeek && (
+                    <>
+                        <div className="absolute top-0 right-0 p-2 md:p-3 opacity-30 text-blue-200"><Snowflake size={16} className="md:w-6 md:h-6" /></div>
+                        <div className="absolute inset-0 border border-white/10 rounded-[1rem] md:rounded-[1.2rem] pointer-events-none"></div>
+                    </>
+                )}
+                
+                <img
+                    src={product.image}
+                    alt={product.name}
+                    className={`
+                        w-full h-full object-contain object-center transition-transform duration-700 group-hover:scale-110
+                        ${isBlackWeek ? 'drop-shadow-2xl' : 'mix-blend-multiply'} 
+                    `}
+                    loading="lazy"
+                />
+            </div>
+        </Link>
 
         {/* Floating Badges */}
-        <div className="absolute top-2 left-2 md:top-4 md:left-4 z-20 flex flex-col gap-1.5 md:gap-2 items-start">
+        <div className="absolute top-2 left-2 md:top-4 md:left-4 z-20 flex flex-col gap-1.5 md:gap-2 items-start pointer-events-none">
           {isBlackWeek && (
             <span className="inline-flex items-center gap-1 px-2 py-0.5 md:px-3 md:py-1 rounded-full bg-yellow-400/90 backdrop-blur-sm text-black text-[8px] md:text-[10px] font-black uppercase tracking-wider shadow-lg shadow-yellow-400/20 border border-yellow-300">
               <Zap size={8} className="md:w-2.5 md:h-2.5" fill="currentColor" /> <span className="hidden xs:inline">Black Week</span>
@@ -107,7 +109,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         >
           <Heart size={14} className="md:w-4 md:h-4" fill={isLiked ? "currentColor" : "none"} />
         </button>
-      </Link>
+      </div>
 
       {/* --- Content Section --- */}
       <div className="p-3 md:p-5 flex flex-col flex-grow">
