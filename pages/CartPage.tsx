@@ -72,17 +72,17 @@ export const CartPage: React.FC = () => {
 
   return (
     <div className="bg-slate-50/50 min-h-screen pb-20">
-      <div className="max-w-7xl mx-auto px-4 md:px-8 py-10">
+      <div className="max-w-7xl mx-auto px-4 md:px-8 py-6 md:py-10">
         
-        <h1 className="text-4xl font-black text-slate-900 mb-8 tracking-tight">Twój Koszyk <span className="text-slate-400 text-lg font-bold ml-2">({items.length} prod.)</span></h1>
+        <h1 className="text-3xl md:text-4xl font-black text-slate-900 mb-6 md:mb-8 tracking-tight">Twój Koszyk <span className="text-slate-400 text-lg font-bold ml-2">({items.length} prod.)</span></h1>
 
-        <div className="flex flex-col lg:flex-row gap-10 items-start">
+        <div className="flex flex-col lg:flex-row gap-6 md:gap-10 items-start">
             
             {/* --- LEFT COLUMN: Items & Options --- */}
-            <div className="flex-1 w-full space-y-6">
+            <div className="flex-1 w-full space-y-4 md:space-y-6">
                 
                 {/* 1. Free Shipping Progress Bar */}
-                <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm relative overflow-hidden">
+                <div className="bg-white p-5 md:p-6 rounded-3xl border border-slate-100 shadow-sm relative overflow-hidden">
                     <div className="relative z-10">
                         {cartTotal >= FREE_SHIPPING_THRESHOLD ? (
                             <div className="flex items-center gap-3 text-green-600 mb-2">
@@ -108,11 +108,11 @@ export const CartPage: React.FC = () => {
                 </div>
 
                 {/* 2. Cart Items List */}
-                <div className="space-y-4">
+                <div className="space-y-3 md:space-y-4">
                     {items.map((item) => {
                         const hasDiscount = item.previousPrice && item.previousPrice > item.price;
                         return (
-                            <div key={item.id} className="group bg-white p-4 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col sm:flex-row gap-6">
+                            <div key={item.id} className="group bg-white p-4 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col sm:flex-row gap-4 sm:gap-6">
                                 {/* Image */}
                                 <div className="w-full sm:w-32 h-32 bg-slate-50 rounded-2xl flex items-center justify-center p-2 shrink-0">
                                     <img src={item.image} alt={item.name} className="w-full h-full object-contain mix-blend-multiply" />
@@ -142,20 +142,20 @@ export const CartPage: React.FC = () => {
                                     </div>
 
                                     {/* Controls Row */}
-                                    <div className="flex items-center justify-between mt-4 sm:mt-0 pt-4 sm:pt-0 border-t sm:border-0 border-slate-50">
+                                    <div className="flex items-center justify-between mt-4 sm:mt-0 pt-3 sm:pt-0 border-t sm:border-0 border-slate-50">
                                         <div className="flex items-center gap-4">
                                             {/* Qty Stepper */}
                                             <div className="flex items-center gap-1 bg-slate-50 p-1 rounded-xl border border-slate-100">
                                                 <button 
                                                     onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                                                    className="w-8 h-8 flex items-center justify-center bg-white rounded-lg text-slate-600 shadow-sm hover:bg-red-50 hover:text-red-500 disabled:opacity-50 transition-colors"
+                                                    className="w-8 h-8 md:w-8 md:h-8 flex items-center justify-center bg-white rounded-lg text-slate-600 shadow-sm hover:bg-red-50 hover:text-red-500 disabled:opacity-50 transition-colors"
                                                 >
                                                     <Minus size={14} strokeWidth={3} />
                                                 </button>
                                                 <span className="w-8 text-center font-black text-sm">{item.quantity}</span>
                                                 <button 
                                                     onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                                                    className="w-8 h-8 flex items-center justify-center bg-white rounded-lg text-slate-600 shadow-sm hover:bg-green-50 hover:text-green-500 transition-colors"
+                                                    className="w-8 h-8 md:w-8 md:h-8 flex items-center justify-center bg-white rounded-lg text-slate-600 shadow-sm hover:bg-green-50 hover:text-green-500 transition-colors"
                                                 >
                                                     <Plus size={14} strokeWidth={3} />
                                                 </button>
@@ -183,7 +183,7 @@ export const CartPage: React.FC = () => {
                                         {/* Total Price for Item */}
                                         <div className="text-right">
                                             <span className="text-xs text-slate-400 font-bold block sm:hidden mb-0.5">Suma:</span>
-                                            <span className="font-black text-xl text-slate-900">{(item.price * item.quantity).toFixed(2)} zł</span>
+                                            <span className="font-black text-lg md:text-xl text-slate-900">{(item.price * item.quantity).toFixed(2)} zł</span>
                                         </div>
                                     </div>
                                 </div>

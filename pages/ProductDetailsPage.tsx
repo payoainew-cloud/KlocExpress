@@ -85,18 +85,18 @@ export const ProductDetailsPage: React.FC = () => {
   const isLiked = isInWishlist(product.id);
 
   return (
-    <div className="bg-slate-50/50 min-h-screen pb-20 selection:bg-orange-100 selection:text-orange-900">
+    <div className="bg-slate-50/50 min-h-screen pb-32 md:pb-20 selection:bg-orange-100 selection:text-orange-900 relative">
       
       {/* Navigation Bar - Static */}
-      <div className="max-w-7xl mx-auto px-4 md:px-8 pt-8 pb-2">
+      <div className="max-w-7xl mx-auto px-4 md:px-8 pt-4 md:pt-8 pb-2">
           <div className="flex items-center gap-3">
              {/* Back Button as Rounded Square */}
              <Link 
                 to="/produkty" 
-                className="w-12 h-12 flex items-center justify-center rounded-2xl bg-white border-2 border-slate-50 shadow-sm text-slate-400 hover:text-slate-900 hover:border-slate-200 transition-all duration-300 hover:-translate-x-1"
+                className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-xl md:rounded-2xl bg-white border-2 border-slate-50 shadow-sm text-slate-400 hover:text-slate-900 hover:border-slate-200 transition-all duration-300 hover:-translate-x-1"
                 title="Wróć do listy"
              >
-                <ArrowLeft size={22} strokeWidth={2.5} />
+                <ArrowLeft size={20} strokeWidth={2.5} />
              </Link>
              
              {/* Breadcrumbs Pill */}
@@ -111,18 +111,18 @@ export const ProductDetailsPage: React.FC = () => {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 md:px-8 py-4">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 xl:gap-24 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-12 xl:gap-24 items-start">
             
             {/* --- Left: Immersive Image Section --- */}
-            <div className="lg:col-span-7 sticky top-32">
-                <div className={`relative aspect-square rounded-[2.5rem] overflow-hidden flex items-center justify-center group shadow-2xl shadow-slate-200/50 ${isBlackWeek ? 'bg-slate-900 border-4 border-slate-800' : 'bg-white border border-slate-100'}`}>
+            <div className="lg:col-span-7 relative lg:sticky lg:top-32 z-10">
+                <div className={`relative aspect-[4/3] md:aspect-square rounded-[2rem] md:rounded-[2.5rem] overflow-hidden flex items-center justify-center group shadow-xl md:shadow-2xl shadow-slate-200/50 ${isBlackWeek ? 'bg-slate-900 border-4 border-slate-800' : 'bg-white border border-slate-100'}`}>
                     
                     {/* Background Radial Gradient - Studio Light Effect */}
                     <div className={`absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] ${isBlackWeek ? 'from-slate-800 via-slate-900 to-black opacity-80' : 'from-gray-50 via-white to-white opacity-100'}`}></div>
                     
                     {/* Discount Badge */}
                     {hasDiscount && (
-                        <div className="absolute top-8 left-8 bg-black text-white text-lg font-black px-5 py-2.5 rounded-full z-10 shadow-xl">
+                        <div className="absolute top-4 left-4 md:top-8 md:left-8 bg-black text-white text-xs md:text-lg font-black px-3 py-1.5 md:px-5 md:py-2.5 rounded-full z-10 shadow-xl">
                             -{Math.round(((product.previousPrice! - product.price) / product.previousPrice!) * 100)}%
                         </div>
                     )}
@@ -130,70 +130,71 @@ export const ProductDetailsPage: React.FC = () => {
                     <img 
                         src={product.image} 
                         alt={product.name} 
-                        className={`relative w-4/5 h-4/5 object-contain drop-shadow-2xl transition-transform duration-700 ease-out group-hover:scale-105 ${!isBlackWeek && 'mix-blend-multiply'}`}
+                        className={`relative w-[85%] h-[85%] object-contain drop-shadow-2xl transition-transform duration-700 ease-out group-hover:scale-105 ${!isBlackWeek && 'mix-blend-multiply'}`}
                     />
 
                     {/* Zoom Hint */}
-                    <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-black/5 backdrop-blur-md px-4 py-2 rounded-full text-xs font-bold text-slate-500 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none border border-white/20">
+                    <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-black/5 backdrop-blur-md px-4 py-2 rounded-full text-xs font-bold text-slate-500 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none border border-white/20 hidden md:block">
                         Przybliż zdjęcie
                     </div>
                 </div>
             </div>
 
             {/* --- Right: Editorial Details --- */}
-            <div className="lg:col-span-5 flex flex-col pt-4">
-                <div className="flex items-center gap-3 mb-6">
-                    <Link to={`/produkty?category=${product.category}`} className="text-slate-500 font-bold text-xs uppercase tracking-widest border border-slate-200 px-3 py-1.5 rounded-full hover:bg-slate-50 transition-colors">
+            <div className="lg:col-span-5 flex flex-col pt-2 md:pt-4">
+                <div className="flex flex-wrap items-center gap-2 md:gap-3 mb-4 md:mb-6">
+                    <Link to={`/produkty?category=${product.category}`} className="text-slate-500 font-bold text-[10px] md:text-xs uppercase tracking-widest border border-slate-200 px-3 py-1.5 rounded-full hover:bg-slate-50 transition-colors">
                         {product.category}
                     </Link>
-                    {product.isNew && <span className="text-blue-600 font-bold text-xs uppercase tracking-widest flex items-center gap-1 bg-blue-50 px-3 py-1.5 rounded-full"><Star size={12} fill="currentColor" /> Nowość</span>}
-                    {isBlackWeek && <span className="text-yellow-600 font-bold text-xs uppercase tracking-widest bg-yellow-100 px-3 py-1.5 rounded-full">Black Week</span>}
+                    {product.isNew && <span className="text-blue-600 font-bold text-[10px] md:text-xs uppercase tracking-widest flex items-center gap-1 bg-blue-50 px-3 py-1.5 rounded-full"><Star size={12} fill="currentColor" /> Nowość</span>}
+                    {isBlackWeek && <span className="text-yellow-600 font-bold text-[10px] md:text-xs uppercase tracking-widest bg-yellow-100 px-3 py-1.5 rounded-full">Black Week</span>}
                 </div>
 
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-slate-900 leading-[1.05] mb-8 tracking-tight">
+                <h1 className="text-3xl md:text-5xl lg:text-6xl font-black text-slate-900 leading-[1.1] mb-6 md:mb-8 tracking-tight">
                     {product.name}
                 </h1>
 
-                <div className="flex flex-col gap-2 mb-10 pb-10 border-b border-slate-100">
-                    <div className="flex items-baseline gap-4">
-                        <span className={`text-6xl font-black tracking-tighter ${isBlackWeek ? 'text-yellow-500' : 'text-slate-900'}`}>
-                            {product.price.toFixed(0)}<span className="text-3xl">.{(product.price % 1).toFixed(2).substring(2)}</span> <span className="text-2xl font-bold text-slate-400">zł</span>
+                <div className="flex flex-col gap-2 mb-8 md:mb-10 pb-8 md:pb-10 border-b border-slate-100">
+                    <div className="flex items-baseline gap-2 md:gap-4">
+                        <span className={`text-4xl md:text-6xl font-black tracking-tighter ${isBlackWeek ? 'text-yellow-500' : 'text-slate-900'}`}>
+                            {product.price.toFixed(0)}<span className="text-xl md:text-3xl">.{(product.price % 1).toFixed(2).substring(2)}</span> <span className="text-lg md:text-2xl font-bold text-slate-400">zł</span>
                         </span>
                     </div>
                     {hasDiscount && (
-                        <div className="text-lg text-slate-400 font-medium flex items-center gap-2">
+                        <div className="text-sm md:text-lg text-slate-400 font-medium flex items-center gap-2">
                             <span className="line-through">{product.previousPrice!.toFixed(2)} zł</span>
                             <span className="text-red-500 font-bold">Najniższa cena z 30 dni</span>
                         </div>
                     )}
                 </div>
 
-                <div className="space-y-6 mb-12">
-                    <h3 className="text-sm font-black uppercase tracking-widest text-slate-400">O produkcie</h3>
-                    <p className="text-lg text-slate-700 leading-relaxed font-medium">
+                <div className="space-y-6 mb-8 md:mb-12">
+                    <h3 className="text-xs md:text-sm font-black uppercase tracking-widest text-slate-400">O produkcie</h3>
+                    <p className="text-base md:text-lg text-slate-700 leading-relaxed font-medium">
                         {product.description}
                     </p>
                     
                     {/* Mock Specs */}
-                    <div className="grid grid-cols-2 gap-4">
-                        <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 flex items-start gap-3">
-                            <Box className="text-slate-400 mt-1" size={20} />
+                    <div className="grid grid-cols-2 gap-3 md:gap-4">
+                        <div className="p-3 md:p-4 rounded-2xl bg-slate-50 border border-slate-100 flex items-start gap-3">
+                            <Box className="text-slate-400 mt-1 shrink-0" size={20} />
                             <div>
-                                <div className="font-bold text-slate-900">~1200 elementów</div>
+                                <div className="font-bold text-slate-900 text-sm md:text-base">~1200 elementów</div>
                                 <div className="text-xs text-slate-500">Duży zestaw</div>
                             </div>
                         </div>
-                        <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 flex items-start gap-3">
-                            <Ruler className="text-slate-400 mt-1" size={20} />
+                        <div className="p-3 md:p-4 rounded-2xl bg-slate-50 border border-slate-100 flex items-start gap-3">
+                            <Ruler className="text-slate-400 mt-1 shrink-0" size={20} />
                             <div>
-                                <div className="font-bold text-slate-900">Wiek 9+</div>
+                                <div className="font-bold text-slate-900 text-sm md:text-base">Wiek 9+</div>
                                 <div className="text-xs text-slate-500">Dla starszych</div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div className="mt-auto space-y-6">
+                {/* Desktop Action Area */}
+                <div className="mt-auto space-y-6 hidden md:block">
                     <div className="flex gap-4">
                         <Button 
                             size="lg" 
@@ -234,27 +235,53 @@ export const ProductDetailsPage: React.FC = () => {
         </div>
 
         {/* Separator */}
-        <div className="h-px bg-slate-100 my-24"></div>
+        <div className="h-px bg-slate-100 my-12 md:my-24"></div>
 
         {/* Related Products */}
         {relatedProducts.length > 0 && (
-            <div className="space-y-12">
+            <div className="space-y-8 md:space-y-12">
                 <div className="flex items-end justify-between">
                     <div>
-                        <h3 className="text-3xl font-black text-slate-900 tracking-tight mb-2">Zobacz również</h3>
-                        <p className="text-slate-500 font-medium">Inne zestawy z kategorii {product.category}</p>
+                        <h3 className="text-2xl md:text-3xl font-black text-slate-900 tracking-tight mb-2">Zobacz również</h3>
+                        <p className="text-sm md:text-base text-slate-500 font-medium">Inne zestawy z kategorii {product.category}</p>
                     </div>
                     <Link to={`/produkty?category=${product.category}`} className="hidden sm:block text-slate-900 font-bold hover:text-orange-600 transition-colors">
                         Wszystkie produkty
                     </Link>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                {/* Mobile: 2 cols, Desktop: 4 cols */}
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-8">
                     {relatedProducts.map(p => (
                         <ProductCard key={p.id} product={p} />
                     ))}
                 </div>
+                 <div className="sm:hidden text-center mt-6">
+                    <Link to={`/produkty?category=${product.category}`} className="inline-block px-6 py-3 bg-slate-100 rounded-full text-slate-900 font-bold text-sm">
+                        Zobacz wszystkie
+                    </Link>
+                </div>
             </div>
         )}
+      </div>
+
+      {/* --- Mobile Sticky Bottom Action Bar --- */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 p-3 bg-white border-t border-slate-100 shadow-[0_-5px_20px_rgba(0,0,0,0.05)] z-50 flex gap-3 items-center safe-area-pb">
+        <button 
+            className={`h-14 w-14 flex items-center justify-center rounded-2xl border-2 transition-colors ${isLiked ? 'border-red-100 bg-red-50 text-red-500' : 'border-slate-100 bg-slate-50 text-slate-400'}`}
+            onClick={() => toggleWishlist(product.id)}
+        >
+            <Heart size={24} fill={isLiked ? "currentColor" : "none"} />
+        </button>
+        <Button 
+            className={`flex-1 h-14 text-lg rounded-2xl shadow-lg ${isAdded ? 'bg-green-500 text-white' : 'bg-slate-900 text-white'}`}
+            onClick={handleAddToCart}
+        >
+             {isAdded ? (
+                <span className="flex items-center justify-center gap-2"><Check size={20} strokeWidth={3} /> Dodano</span>
+            ) : (
+                <span className="flex items-center justify-center gap-2"><ShoppingCart size={20} /> {product.price.toFixed(0)} zł - Do koszyka</span>
+            )}
+        </Button>
       </div>
     </div>
   );

@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { Button } from './Button';
 import { ArrowRight, Loader2, Truck } from 'lucide-react';
@@ -49,14 +50,14 @@ export const HeroBanner: React.FC = () => {
 
   if (loading) {
       return (
-        <div className="w-full h-[500px] md:h-[600px] bg-slate-900 flex items-center justify-center">
+        <div className="w-full h-[450px] md:h-[600px] bg-slate-900 flex items-center justify-center">
             <Loader2 className="animate-spin text-orange-500 w-12 h-12" />
         </div>
       );
   }
 
   return (
-    <div className="relative w-full h-[500px] md:h-[600px] overflow-hidden bg-slate-900">
+    <div className="relative w-full h-[450px] md:h-[600px] overflow-hidden bg-slate-900">
       {/* Background Image */}
       <div 
         className="absolute inset-0 bg-cover bg-center transition-opacity duration-700"
@@ -72,21 +73,21 @@ export const HeroBanner: React.FC = () => {
       {/* Content */}
       <div className="relative z-10 h-full max-w-7xl mx-auto px-4 md:px-8 flex flex-col justify-center items-start">
         {content.subtitle && (
-            <span className="bg-orange-600 text-white font-black px-4 py-1.5 rounded-r-full border-l-4 border-yellow-400 mb-6 text-sm uppercase tracking-widest shadow-lg flex items-center gap-2 animate-fade-in-up">
-                <Truck size={16} /> {content.subtitle}
+            <span className="bg-orange-600 text-white font-black px-3 py-1 md:px-4 md:py-1.5 rounded-r-full border-l-4 border-yellow-400 mb-4 md:mb-6 text-xs md:text-sm uppercase tracking-widest shadow-lg flex items-center gap-2 animate-fade-in-up">
+                <Truck size={14} className="md:w-4 md:h-4" /> {content.subtitle}
             </span>
         )}
         
-        <h1 className="text-5xl md:text-7xl font-black text-white mb-6 leading-tight max-w-3xl drop-shadow-2xl">
+        <h1 className="text-4xl md:text-7xl font-black text-white mb-4 md:mb-6 leading-tight max-w-3xl drop-shadow-2xl">
           {content.titleMain} <br/>
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-500">{content.titleHighlight}</span>
         </h1>
         
-        <p className="text-lg md:text-xl text-slate-300 mb-8 max-w-lg leading-relaxed font-medium">
+        <p className="text-base md:text-xl text-slate-300 mb-6 md:mb-8 max-w-lg leading-relaxed font-medium">
           {content.description}
         </p>
         
-        <div className="flex flex-col sm:flex-row gap-4">
+        <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
           <Link to={content.buttonLink}>
               <Button variant="primary" size="lg" className="shadow-orange-500/20 w-full sm:w-auto bg-yellow-400 text-slate-900 hover:bg-yellow-300">
                 {content.buttonText} <ArrowRight className="ml-2 w-5 h-5" />

@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { ShoppingCart, Heart, Check, Zap, Sparkles, Flame, Snowflake } from 'lucide-react';
 import { Product } from '../types';
@@ -45,20 +46,20 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   // Image Container & Winter Frame Logic
   const imageContainerBase = "relative aspect-[4/3] w-full overflow-hidden transition-all duration-500";
   const imageContainerStyle = isBlackWeek 
-    ? "bg-slate-800 border-4 border-blue-200/20 shadow-[inset_0_0_20px_rgba(147,197,253,0.1)] rounded-t-3xl" // Winter Frame
-    : "bg-gray-50 rounded-t-3xl"; // Standard
+    ? "bg-slate-800 border-2 md:border-4 border-blue-200/20 shadow-[inset_0_0_20px_rgba(147,197,253,0.1)] rounded-t-2xl md:rounded-t-3xl" // Winter Frame
+    : "bg-gray-50 rounded-t-2xl md:rounded-t-3xl"; // Standard
 
   return (
-    <div className={`group relative rounded-3xl flex flex-col h-full transition-all duration-500 hover:-translate-y-1.5 ${containerClasses}`}>
+    <div className={`group relative rounded-2xl md:rounded-3xl flex flex-col h-full transition-all duration-500 hover:-translate-y-1.5 ${containerClasses}`}>
       
       {/* --- Image Section --- */}
       <Link to={`/produkt/${product.id}`} className={imageContainerBase}>
-        <div className={`w-full h-full p-6 flex items-center justify-center ${imageContainerStyle}`}>
+        <div className={`w-full h-full p-4 md:p-6 flex items-center justify-center ${imageContainerStyle}`}>
             {/* Winter Decoration for Black Week */}
             {isBlackWeek && (
                 <>
-                    <div className="absolute top-0 right-0 p-3 opacity-30 text-blue-200"><Snowflake size={24} /></div>
-                    <div className="absolute inset-0 border border-white/10 rounded-[1.2rem] pointer-events-none"></div>
+                    <div className="absolute top-0 right-0 p-2 md:p-3 opacity-30 text-blue-200"><Snowflake size={16} className="md:w-6 md:h-6" /></div>
+                    <div className="absolute inset-0 border border-white/10 rounded-[1rem] md:rounded-[1.2rem] pointer-events-none"></div>
                 </>
             )}
             
@@ -74,20 +75,20 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         </div>
 
         {/* Floating Badges */}
-        <div className="absolute top-4 left-4 z-20 flex flex-col gap-2 items-start">
+        <div className="absolute top-2 left-2 md:top-4 md:left-4 z-20 flex flex-col gap-1.5 md:gap-2 items-start">
           {isBlackWeek && (
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-yellow-400/90 backdrop-blur-sm text-black text-[10px] font-black uppercase tracking-wider shadow-lg shadow-yellow-400/20 border border-yellow-300">
-              <Zap size={10} fill="currentColor" /> Black Week
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 md:px-3 md:py-1 rounded-full bg-yellow-400/90 backdrop-blur-sm text-black text-[8px] md:text-[10px] font-black uppercase tracking-wider shadow-lg shadow-yellow-400/20 border border-yellow-300">
+              <Zap size={8} className="md:w-2.5 md:h-2.5" fill="currentColor" /> <span className="hidden xs:inline">Black Week</span>
             </span>
           )}
           {product.isNew && (
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/80 backdrop-blur-md text-blue-600 border border-blue-100/50 text-[10px] font-bold uppercase tracking-wider shadow-sm">
-              <Sparkles size={10} /> Nowość
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 md:px-3 md:py-1 rounded-full bg-white/80 backdrop-blur-md text-blue-600 border border-blue-100/50 text-[8px] md:text-[10px] font-bold uppercase tracking-wider shadow-sm">
+              <Sparkles size={8} className="md:w-2.5 md:h-2.5" /> Nowość
             </span>
           )}
           {product.isPromo && !isBlackWeek && (
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/80 backdrop-blur-md text-orange-600 border border-orange-100/50 text-[10px] font-bold uppercase tracking-wider shadow-sm">
-              <Flame size={10} /> Promocja
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 md:px-3 md:py-1 rounded-full bg-white/80 backdrop-blur-md text-orange-600 border border-orange-100/50 text-[8px] md:text-[10px] font-bold uppercase tracking-wider shadow-sm">
+              <Flame size={8} className="md:w-2.5 md:h-2.5" /> Promocja
             </span>
           )}
         </div>
@@ -95,44 +96,44 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         {/* Wishlist Action */}
         <button 
           className={`
-            absolute top-4 right-4 z-20 p-2.5 rounded-full backdrop-blur-md transition-all duration-300 shadow-sm
+            absolute top-2 right-2 md:top-4 md:right-4 z-20 p-2 md:p-2.5 rounded-full backdrop-blur-md transition-all duration-300 shadow-sm
             ${isLiked 
                 ? 'bg-red-50 text-red-500 opacity-100 translate-x-0' 
-                : 'bg-white/80 text-slate-400 opacity-0 group-hover:opacity-100 translate-x-4 group-hover:translate-x-0 hover:text-red-500 hover:bg-white'
+                : 'bg-white/80 text-slate-400 md:opacity-0 md:group-hover:opacity-100 md:translate-x-4 md:group-hover:translate-x-0 hover:text-red-500 hover:bg-white'
             }
           `}
           onClick={handleToggleWishlist}
           title={isLiked ? "Usuń z ulubionych" : "Dodaj do ulubionych"}
         >
-          <Heart size={16} fill={isLiked ? "currentColor" : "none"} />
+          <Heart size={14} className="md:w-4 md:h-4" fill={isLiked ? "currentColor" : "none"} />
         </button>
       </Link>
 
       {/* --- Content Section --- */}
-      <div className="p-5 flex flex-col flex-grow">
+      <div className="p-3 md:p-5 flex flex-col flex-grow">
         <Link 
             to={`/produkty?category=${product.category}`} 
-            className={`text-[10px] font-black uppercase tracking-widest mb-2 transition-colors hover:opacity-80 ${categoryColor}`}
+            className={`text-[8px] md:text-[10px] font-black uppercase tracking-widest mb-1 md:mb-2 transition-colors hover:opacity-80 truncate ${categoryColor}`}
         >
           {product.category}
         </Link>
         
         <Link to={`/produkt/${product.id}`} className="block mb-auto">
-          <h3 className={`text-base font-bold leading-tight line-clamp-2 transition-colors ${titleColor}`}>
+          <h3 className={`text-sm md:text-base font-bold leading-tight line-clamp-2 transition-colors ${titleColor}`}>
             {product.name}
           </h3>
         </Link>
 
         {/* Price & Action Row */}
-        <div className="mt-5 flex items-end justify-between">
+        <div className="mt-3 md:mt-5 flex items-end justify-between gap-2">
           <div className="flex flex-col leading-none">
              {hasDiscount && (
-                <span className={`text-xs font-bold line-through mb-1 ${isBlackWeek ? 'text-slate-500' : 'text-slate-300'}`}>
+                <span className={`text-[10px] md:text-xs font-bold line-through mb-0.5 md:mb-1 ${isBlackWeek ? 'text-slate-500' : 'text-slate-300'}`}>
                   {product.previousPrice?.toFixed(2)} zł
                 </span>
              )}
-             <div className={`text-xl font-black tracking-tighter ${priceColor}`}>
-               {product.price.toFixed(2)} <span className="text-xs font-bold opacity-60">zł</span>
+             <div className={`text-base md:text-xl font-black tracking-tighter ${priceColor}`}>
+               {product.price.toFixed(0)}<span className="text-xs md:text-sm">.{(product.price % 1).toFixed(2).substring(2)}</span> <span className="text-[10px] md:text-xs font-bold opacity-60">zł</span>
              </div>
           </div>
 
@@ -140,7 +141,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             onClick={handleAddToCart}
             disabled={isAdded}
             className={`
-                h-10 w-10 flex items-center justify-center rounded-full transition-all duration-300 shadow-md hover:scale-110 active:scale-95
+                h-8 w-8 md:h-10 md:w-10 flex items-center justify-center rounded-full transition-all duration-300 shadow-md hover:scale-110 active:scale-95 shrink-0
                 ${isAdded 
                     ? 'bg-green-500 text-white shadow-green-500/30' 
                     : isBlackWeek 
@@ -149,7 +150,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                 }
             `}
           >
-            {isAdded ? <Check size={18} strokeWidth={3} /> : <ShoppingCart size={18} strokeWidth={2.5} />}
+            {isAdded ? <Check size={14} className="md:w-[18px] md:h-[18px]" strokeWidth={3} /> : <ShoppingCart size={14} className="md:w-[18px] md:h-[18px]" strokeWidth={2.5} />}
           </button>
         </div>
       </div>

@@ -104,15 +104,15 @@ export const ProductListingPage: React.FC = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 md:px-8 py-8">
+    <div className="max-w-7xl mx-auto px-4 md:px-8 py-4 md:py-8">
       
       {/* Header */}
-      <div className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
+      <div className="mb-6 md:mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
-            <h1 className="text-3xl font-black text-gray-900 mb-2">
+            <h1 className="text-2xl md:text-3xl font-black text-gray-900 mb-2">
             {query ? `Wyniki wyszukiwania: "${query}"` : 'Wszystkie Produkty'}
             </h1>
-            <p className="text-gray-500 font-medium">
+            <p className="text-gray-500 font-medium text-sm md:text-base">
                 {loading ? 'Ładowanie...' : `Znaleziono ${filteredProducts.length} produktów`}
             </p>
         </div>
@@ -120,7 +120,7 @@ export const ProductListingPage: React.FC = () => {
         {/* Sorting Toolbar */}
         <div className="flex items-center gap-2">
             <span className="text-sm text-gray-500 font-bold hidden sm:block">Sortuj:</span>
-            <div className="relative">
+            <div className="relative flex-1 md:flex-none">
                 <select 
                     className="appearance-none bg-gray-100 border-none text-gray-900 text-sm rounded-lg focus:ring-2 focus:ring-yellow-400 focus:bg-white block w-full p-2.5 pr-8 font-bold cursor-pointer transition-colors"
                     value={sortOrder}
@@ -135,7 +135,7 @@ export const ProductListingPage: React.FC = () => {
         </div>
       </div>
 
-      <div className="flex flex-col lg:flex-row gap-8">
+      <div className="flex flex-col lg:flex-row gap-6 md:gap-8">
         
         {/* Mobile Filter Button */}
         <button 
@@ -235,7 +235,7 @@ export const ProductListingPage: React.FC = () => {
                     <Loader2 className="animate-spin text-red-600 w-10 h-10" />
                 </div>
             ) : filteredProducts.length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
                     {filteredProducts.map(product => (
                         <ProductCard key={product.id} product={product} />
                     ))}

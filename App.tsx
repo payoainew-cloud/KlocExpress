@@ -15,9 +15,12 @@ import { WishlistPage } from './pages/WishlistPage';
 // Scroll to top on route change wrapper
 const ScrollToTop = () => {
   const { pathname } = useLocation();
-  React.useEffect(() => {
-    window.scrollTo(0, 0);
+  
+  React.useLayoutEffect(() => {
+    // Wymuszamy natychmiastowy skok do góry, pomijając animacje smooth-scroll
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
   }, [pathname]);
+  
   return null;
 };
 

@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Search, ShoppingBag, User, Menu, X, Truck, ShieldCheck, Clock, Zap, Heart, ChevronDown, Package, LayoutGrid, ArrowRight, Layers } from 'lucide-react';
 import { Button } from './Button';
@@ -157,6 +158,7 @@ export const Header: React.FC = () => {
                         <div className="w-8 h-8 bg-yellow-400 flex items-center justify-center rounded-lg shadow-sm">
                             <Truck className="text-slate-900" size={16} strokeWidth={2.5} />
                         </div>
+                        {/* Hidden on small screens to fit icons */}
                         <span className="font-black text-sm italic tracking-tight text-slate-900 hidden sm:block">Kloc-Express</span>
                     </Link>
                 </div>
