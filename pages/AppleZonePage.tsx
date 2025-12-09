@@ -1,13 +1,27 @@
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Product } from '../types';
 import { ProductCard } from '../components/ProductCard';
-import { Cpu, ChevronRight, Loader2 } from 'lucide-react';
+import { Cpu, ChevronRight, Loader2, Smartphone, Monitor, ShoppingBag, Layers, Aperture } from 'lucide-react';
 import { supabase, mapProductFromDB } from '../lib/supabaseClient';
+import { Button } from '../components/Button';
+import { Link } from 'react-router-dom';
 
 export const AppleZonePage: React.FC = () => {
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState(true);
+    const [scrollProgress, setScrollProgress] = useState(0);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            const totalScroll = document.documentElement.scrollTop;
+            const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scroll = totalScroll / windowHeight;
+            setScrollProgress(scroll);
+        }
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
 
     useEffect(() => {
         const fetchAppleProducts = async () => {
@@ -18,17 +32,13 @@ export const AppleZonePage: React.FC = () => {
                     .eq('category', 'LEGO x Apple');
 
                 if (error) throw error;
-
-                if (data) {
-                    setProducts(data.map(mapProductFromDB));
-                }
+                if (data) setProducts(data.map(mapProductFromDB));
             } catch (err) {
                 console.error('Error fetching Apple products:', err);
             } finally {
                 setLoading(false);
             }
         };
-
         fetchAppleProducts();
     }, []);
 
@@ -41,70 +51,160 @@ export const AppleZonePage: React.FC = () => {
     }
 
     return (
-        <div className="bg-black min-h-screen text-white pb-20">
+        <div className="bg-black min-h-screen text-white selection:bg-blue-500 selection:text-white">
             
-            {/* Hero Section */}
-            <div className="relative pt-32 pb-20 px-4 overflow-hidden">
-                <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-gray-800 via-black to-black opacity-50"></div>
+            {/* --- Sticky Sub-Nav --- */}
+            <div className="sticky top-0 z-40 bg-black/80 backdrop-blur-md border-b border-white/10 transition-all duration-300">
+                <div className="max-w-7xl mx-auto px-4 md:px-8 h-12 flex items-center justify-between text-xs md:text-sm">
+                    <span className="font-bold text-gray-200">Apple x LEGO</span>
+                    <div className="flex gap-4 md:gap-8 text-gray-400">
+                        <a href="#overview" className="hover:text-white transition-colors">Przegląd</a>
+                        <a href="#tech-specs" className="hover:text-white transition-colors">Dane techniczne</a>
+                        <a href="#shop" className="text-white bg-blue-600 px-3 py-1 rounded-full hover:bg-blue-500 transition-colors">Kup teraz</a>
+                    </div>
+                </div>
+            </div>
+
+            {/* --- Hero Section --- */}
+            <section id="overview" className="relative min-h-[90vh] flex flex-col items-center justify-center px-4 overflow-hidden pt-20">
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-tr from-blue-900/20 via-purple-900/10 to-transparent rounded-full blur-[100px] pointer-events-none"></div>
                 
-                <div className="max-w-7xl mx-auto text-center relative z-10 animate-fade-in-up">
-                    <div className="inline-flex items-center gap-2 text-gray-400 font-medium mb-6 tracking-wide">
-                        <span>Zaprojektowane w Kalifornii</span>
-                        <span className="w-1 h-1 bg-gray-600 rounded-full"></span>
-                        <span>Zbudowane w Danii</span>
+                <div className="relative z-10 text-center space-y-6 animate-fade-in-up">
+                    <div className="inline-block">
+                        <h1 className="text-6xl md:text-9xl font-bold tracking-tighter bg-gradient-to-b from-gray-100 via-gray-300 to-gray-600 text-transparent bg-clip-text pb-2">
+                            Titanium.
+                        </h1>
                     </div>
-                    
-                    <h1 className="text-6xl md:text-8xl lg:text-9xl font-bold tracking-tighter mb-8 text-white">
-                        Pro. <br/>
-                        <span className="text-gray-500">Beyond.</span>
-                    </h1>
-                    
-                    <p className="text-xl md:text-2xl text-gray-400 max-w-2xl mx-auto leading-relaxed mb-12">
-                        Przedstawiamy wynik współpracy dwóch gigantów designu.
-                        Kolekcja, która zmienia definicję tego, co można zbudować.
+                    <p className="text-2xl md:text-4xl font-medium text-gray-400 tracking-tight">
+                        Tak silny. Tak lekki. Tak kanciasty.
                     </p>
-
-                    <div className="flex justify-center gap-6 text-sm font-bold text-blue-400">
-                        <button className="flex items-center hover:underline">Obejrzyj film <ChevronRight size={16} /></button>
-                        <button className="flex items-center hover:underline">O wydarzeniu <ChevronRight size={16} /></button>
+                    <div className="pt-8 flex justify-center gap-4">
+                        <Link to="#shop" className="text-blue-500 hover:text-blue-400 text-lg md:text-xl font-medium flex items-center gap-1 group">
+                            Kup produkt <ChevronRight size={20} className="group-hover:translate-x-1 transition-transform"/>
+                        </Link>
                     </div>
                 </div>
-            </div>
 
-            {/* Grid Section */}
-            <div className="max-w-7xl mx-auto px-4 md:px-8">
-                <div className="flex items-center justify-between mb-8 border-b border-gray-800 pb-4">
-                    <h2 className="text-3xl font-bold tracking-tight">Dostępne Modele</h2>
-                    <span className="text-gray-500">Limitowana seria</span>
+                {/* Simulated Device Image */}
+                <div className="mt-20 relative w-full max-w-4xl mx-auto aspect-[16/9] bg-gradient-to-b from-gray-900 to-black rounded-t-[3rem] border-t border-x border-gray-800 flex items-center justify-center overflow-hidden shadow-[0_-20px_60px_rgba(255,255,255,0.05)]">
+                    <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20"></div>
+                    <Cpu size={120} className="text-gray-800 animate-pulse" />
                 </div>
+            </section>
 
-                {products.length > 0 ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        {products.map(product => (
-                            <ProductCard key={product.id} product={product} />
-                        ))}
+            {/* --- Feature 1: The Chip --- */}
+            <section id="tech-specs" className="py-32 px-4 bg-zinc-950 border-t border-white/5">
+                <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+                    <div className="order-2 md:order-1">
+                        <div className="w-64 h-64 md:w-96 md:h-96 mx-auto bg-black rounded-[2rem] border border-gray-800 flex items-center justify-center relative shadow-2xl overflow-hidden group">
+                            <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-transparent opacity-50 group-hover:opacity-100 transition-opacity duration-700"></div>
+                            <Cpu size={120} className="text-gray-200 relative z-10" strokeWidth={1} />
+                            <span className="absolute bottom-6 font-mono text-gray-500 text-sm">A19 BIONIC BRICK</span>
+                        </div>
                     </div>
-                ) : (
-                    <div className="py-20 text-center text-gray-500">
-                        Brak produktów w kolekcji Apple x LEGO.
+                    <div className="order-1 md:order-2 space-y-6">
+                        <h2 className="text-4xl md:text-6xl font-bold text-gray-100">
+                            Czip A19 Pro. <br/>
+                            <span className="text-gray-500">Potwór w klockach.</span>
+                        </h2>
+                        <p className="text-xl text-gray-400 leading-relaxed">
+                            Najszybszy czip, jaki kiedykolwiek trafił do klocka LEGO.
+                            Zapewnia wydajność nowej generacji w grach, renderowaniu instrukcji i łączeniu elementów.
+                            Dzięki sprzętowemu wsparciu dla ray tracingu, klocki błyszczą jak nigdy dotąd.
+                        </p>
                     </div>
-                )}
-
-                <div className="mt-20 p-12 bg-gray-900 rounded-3xl text-center border border-gray-800 relative overflow-hidden group">
-                     <div className="absolute inset-0 bg-gradient-to-r from-blue-900/20 to-purple-900/20 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
-                     <Cpu size={48} className="mx-auto text-gray-400 mb-6 relative z-10" />
-                     <h3 className="text-4xl font-bold mb-4 relative z-10">LEGO Silicon.</h3>
-                     <p className="text-gray-400 max-w-lg mx-auto relative z-10">
-                        Każdy zestaw zawiera unikalny, kolekcjonerski klocek z grawerem czipu A19 Pro.
-                        Dostępne tylko w oficjalnej dystrybucji Kloc-Express.
-                     </p>
                 </div>
-            </div>
+            </section>
 
-            {/* Footer Minimal */}
-            <div className="max-w-7xl mx-auto px-4 mt-20 text-center text-gray-600 text-xs">
-                <p>Copyright © 2025 Apple Inc. & LEGO Group. Wszystkie prawa zastrzeżone.</p>
-                <p className="mt-2">iBrick, MacBrick, Vision Brick są znakami towarowymi wyobraźni naszych projektantów.</p>
+            {/* --- Feature 2: Vision --- */}
+            <section className="py-32 px-4 bg-black relative overflow-hidden">
+                <div className="max-w-5xl mx-auto text-center relative z-10">
+                    <div className="mb-10 inline-flex items-center justify-center w-20 h-20 rounded-full bg-white/10 backdrop-blur-md text-white">
+                        <Aperture size={40} />
+                    </div>
+                    <h2 className="text-5xl md:text-7xl font-bold text-white mb-6">
+                        Vision Brick.
+                    </h2>
+                    <p className="text-2xl md:text-3xl text-gray-400 font-medium max-w-3xl mx-auto">
+                        Witamy w erze budowania przestrzennego.
+                    </p>
+                    <p className="mt-8 text-lg text-gray-500 max-w-2xl mx-auto">
+                        Vision Brick łączy cyfrowe instrukcje z Twoim fizycznym biurkiem.
+                        Nawiguj wzrokiem, łącz klocki gestami dłoni i używaj głosu, by znaleźć zagubiony element.
+                    </p>
+                </div>
+                {/* Background effect */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[600px] bg-gradient-to-r from-orange-500/10 via-purple-500/10 to-blue-500/10 blur-[120px] pointer-events-none"></div>
+            </section>
+
+            {/* --- Shop Section --- */}
+            <section id="shop" className="py-32 bg-zinc-900 border-t border-white/5">
+                <div className="max-w-7xl mx-auto px-4 md:px-8">
+                    <div className="text-center mb-16">
+                        <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">Który zestaw jest dla Ciebie?</h2>
+                        <p className="text-xl text-gray-400">Porównaj modele i wybierz swój idealny iBrick.</p>
+                    </div>
+
+                    {products.length > 0 ? (
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                            {products.map(product => (
+                                <div key={product.id} className="bg-black rounded-[2rem] p-8 border border-gray-800 hover:border-gray-600 transition-all duration-300 group flex flex-col">
+                                    <div className="mb-8 relative aspect-square flex items-center justify-center bg-zinc-900/50 rounded-2xl overflow-hidden">
+                                        <img src={product.image} alt={product.name} className="w-3/4 h-3/4 object-contain mix-blend-screen group-hover:scale-110 transition-transform duration-500" />
+                                    </div>
+                                    
+                                    <div className="flex-1">
+                                        <div className="flex items-center gap-2 mb-2">
+                                            <span className="px-3 py-1 bg-zinc-800 rounded-full text-[10px] font-bold uppercase tracking-wider text-gray-300">New</span>
+                                            {product.name.includes('Pro') && <span className="text-gray-500 text-xs font-bold">Pro Edition</span>}
+                                        </div>
+                                        <h3 className="text-2xl font-bold text-white mb-2">{product.name}</h3>
+                                        <p className="text-gray-400 text-sm mb-6 line-clamp-2">{product.description}</p>
+                                        
+                                        <div className="space-y-4 mb-8">
+                                            <div className="flex items-center gap-3 text-sm text-gray-300">
+                                                <Cpu size={16} /> <span>Czip A19 Bionic Brick</span>
+                                            </div>
+                                            <div className="flex items-center gap-3 text-sm text-gray-300">
+                                                <Layers size={16} /> <span>Konstrukcja tytanowa</span>
+                                            </div>
+                                            <div className="flex items-center gap-3 text-sm text-gray-300">
+                                                <Smartphone size={16} /> <span>Dynamic Island (2x4)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="mt-auto flex items-center justify-between pt-6 border-t border-gray-800">
+                                        <span className="text-xl font-bold text-white">{product.price} zł</span>
+                                        <Link to={`/produkt/${product.id}`}>
+                                            <Button className="rounded-full bg-blue-600 hover:bg-blue-500 text-white px-6">
+                                                Kup
+                                            </Button>
+                                        </Link>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    ) : (
+                        <div className="text-center py-20 text-gray-500">
+                            Wszystkie zestawy wyprzedane. Sprawdź dostępność wkrótce.
+                        </div>
+                    )}
+                </div>
+            </section>
+
+             {/* --- Footer Minimal --- */}
+             <div className="py-12 bg-black text-center text-gray-600 text-xs border-t border-white/5">
+                <div className="max-w-4xl mx-auto px-4 space-y-4">
+                    <p>
+                        1. 1 GB = 1 miliard bajtów; faktyczna pojemność sformatowanego nośnika jest mniejsza. 
+                        Wydajność klocków zależy od wyobraźni użytkownika.
+                    </p>
+                    <p>
+                        Ekran ma zaokrąglone rogi, które wpisują się w kształt regularnego prostokąta i podkreślają niezwykły design klocka. 
+                    </p>
+                    <p className="pt-4">Copyright © 2025 Kloc-Express & Apple Inc. Wszystkie prawa zastrzeżone.</p>
+                </div>
             </div>
         </div>
     );
